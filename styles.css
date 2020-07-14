@@ -1,6 +1,6 @@
 @font-face {
-    font-family: AstroSpace-eZ2Bg;
-    src: url('/font/AstroSpace-eZ2Bg.ttf'); 
+    font-family: AstroSpace;
+    src: url('/font/AstroSpace.ttf'); 
   }
   
   .html{
@@ -8,12 +8,24 @@
     padding: 0;
   }
   
+  body{
+    background-image: url(/images/space-purple.jpg);
+    background-size: 120%;
+    background-repeat: no-repeat;
+    background-position-x: -70px;
+  }
+  
   #game-board canvas {
-    background-color: pink;
+    background-color: rgb(175, 58, 165);
+    display: flex;
+    align-content: center;
+    margin-top: 1%;
   }
   
   #game-board{
   display: flex;
   justify-content: center;
-  margin-top: 3%;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  
   }
