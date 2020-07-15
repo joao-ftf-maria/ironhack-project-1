@@ -1,10 +1,18 @@
 
-  let asteroids = [];
-  let laserArr = [];
+  let sads = [];
+  let ballArr = [];
   let enemies = [];
+  let snacksArr = [];
   let getIt = false;
   let enterStart = true;
 
+  const audio = {
+    ball: new Audio ('/sfx/Cartoon Boing Sound Effect.mp3'),
+    eating: new Audio('/sfx/nom-nom-nom.mp3'),
+    oof: new Audio ('/sfx/oof.mp3'),
+    menuMusic: new Audio ('/music/Gitaroo Man OST - 08 The Legendary Theme (Acoustic).mp3'),
+    gameMusic: new Audio ('/music/Aquatic Ambience.mp3'),
+  }
   
   const gameArea = {
     canvas: document.createElement('canvas'),
@@ -32,6 +40,10 @@
     
     start() {
       this.interval = setInterval(updateGame, 1000 / 60);
+      audio.menuMusic.pause();
+      audio.gameMusic.load();
+      audio.gameMusic.volume = 0.1;
+      audio.gameMusic.play();
     },
     
     drawBoard() {
@@ -51,7 +63,7 @@
 
   drawMenu() {
     const starBackground = document.getElementById('background');
-    const ship = document.getElementById('spaceship');
+    const ichi = document.getElementById('ichi');
 
     gameArea.context.drawImage(starBackground, 0, this.y, 800, 900);
 
@@ -71,9 +83,9 @@
 
     this.context.font = ' 73px AstroSpace';
     this.context.fillStyle = '#f5eedc';
-    this.context.fillText('Iron Space', 180, 200);
+    this.context.fillText('Park Crash',150, 200);
 
-    gameArea.context.drawImage(ship, 340, 700, 100, 100);
+    gameArea.context.drawImage(ichi, 340, 700, 100, 100);
 
     this.context.font = ' 22px AstroSpace';
     this.context.fillStyle = '#f5eedc';
@@ -86,6 +98,9 @@
     this.context.font = ' 17px AstroSpace';
     this.context.fillStyle = '#f5eedc';
     this.context.fillText('Arrow keys to move', 300, 630);
+
+    audio.menuMusic.autoplay = true;
+    audio.menuMusic.volume = 0.1;
   },
 
 
@@ -118,7 +133,7 @@
       this.context.font = ' 20px AstroSpace';
       this.context.fillStyle = 'white';
       this.context.fillText(`Score: ${this.totalPoints}`, 40, 50);
-      this.context.fillText('Lives: ' + player.lives, 700,  50);
+      this.context.fillText('Lives: ' + player.lives, 700,  50 );
     },
 
     moveBackground() {
@@ -145,7 +160,7 @@
   };
 
 
-  class SpaceShip {
+  class Ichi {
     constructor(width, height, x, y) {
       this.width = width;
       this.height = height;
@@ -153,18 +168,18 @@
       this.y = y;
       this.speedX = 0;
       this.speedY = 0;
-      this.ship = document.getElementById('spaceship');
+      this.ichi = document.getElementById('ichi');
+      this.explosion = document.getElementById('explosion');
       this.exploding = false;
-
       this.collision = false;
       this.lives = 3;
     }
   
     
-    drawSpaceship() {
+    drawIchi() {
       if (this.exploding === false) {
         gameArea.context.drawImage(
-          this.ship,
+          this.ichi,
           this.x,
           this.y,
           this.width,
@@ -211,20 +226,20 @@
       }
     
      
-      crashWith(asteroid) {
-        const crash = this.bottom() < asteroid.y
-          || this.top() > asteroid.y - 10 + asteroid.height
-          || this.right() < asteroid.x
-          || this.left() > asteroid.x - 10 + asteroid.width;
+      crashWith(sad) {
+        const crash = this.bottom() < sad.y
+          || this.top() > sad.y - 10 + sad.height
+          || this.right() < sad.x
+          || this.left() > sad.x - 10 + sad.width;
         if (!crash) {
           return !crash;
         }
       }
     }
-    const player = new SpaceShip(70, 80);
+    const player = new Ichi(70, 80);
   
 
-  class Asteroids {
+  class Sads {
     constructor(width, height, x, y) {
       this.width = width;
       this.height = height;
@@ -232,21 +247,21 @@
       this.y = y;
     }
   
-    drawAsteroid() {
-      const asteroid = document.getElementById('asteroid');
+    drawSad() {
+      const sad = document.getElementById('sad');
   
       gameArea.context.drawImage(
-        asteroid,
+        sad,
         this.x,
         this.y,
-        this.width,
-        this.height,
+        this.width = 45,
+        this.height = 45,
       );
     }
   }
   
 
-  function createAsteroids() {
+  function createSads() {
     let speed = 1.5;
   
     if (gameArea.totalPoints > 50) {
@@ -261,30 +276,30 @@
       speed = 3;
     }
   
-    for (let i = 0; i < asteroids.length; i += 1) {
-      asteroids[i].y += speed   ;
-      asteroids[i].drawAsteroid();
+    for (let i = 0; i < sads.length; i += 1) {
+      sads[i].y += speed   ;
+      sads[i].drawSad();
     }
   
     if (gameArea.frames % 130 === 0) {
       const y = 0;
-      const x = Math.floor(Math.random() * (790 - 20) + 20);
-      asteroids.push(new Asteroids(40, 40, x, y));
+      const x = Math.floor(Math.random() * (770 - 20) + 20);
+      sads.push(new Sads(40, 40, x, y));
     }
   
     if (gameArea.totalPoints > 50) {
       if (gameArea.frames % 120 === 0) {
         const y = 0;
-        const x = Math.floor(Math.random() * (790 - 20) + 20);
-        asteroids.push(new Asteroids(40, 40, x, y));
+        const x = Math.floor(Math.random() * (770 - 20) + 20);
+        sads.push(new Sads(40, 40, x, y));
       }
     }
   
     if (gameArea.totalPoints > 150) {
       if (gameArea.frames % 110 === 0) {
         const y = 0;
-        const x = Math.floor(Math.random() * (790 - 20) + 20);
-        asteroids.push(new Asteroids(40, 40, x, y));
+        const x = Math.floor(Math.random() * (770 - 20) + 20);
+        sads.push(new Sads(40, 40, x, y));
       }
     }
   }
@@ -352,27 +367,27 @@
 
   
   
-  class Laser {
+  class Ball {
     constructor(x, y, getIt) {
       this.x = x + 26;
       this.y = y - 40;
       this.shoot = true;
-      this.laser = document.getElementById('laser');
+      this.ball = document.getElementById('projectile');
+    
+
     }
   
   
-    drawLaser() {
+    drawBall() {
       if (getIt === false) {
-        gameArea.context.drawImage(this.laser, this.x, this.y, 15, 25);
-      } else {
-        gameArea.context.drawImage(this.laserLarge, this.x, this.y, 25, 40);
+        gameArea.context.drawImage(this.ball, this.x, this.y, 25, 25);
       }
     }
   
   
-    newPosLaser() {
-      for (let i = 0; i < laserArr.length; i += 1) {
-        laserArr[i].y -= 4;
+    newPosBall() {
+      for (let i = 0; i < ballArr.length; i += 1) {
+        ballArr[i].y -= 4;
       }
     }
   
@@ -393,47 +408,123 @@
     }
   
   
-    crashWith(asteroid) {
+    crashWith(sad) {
       return !(
-        this.bottom() < asteroid.y
-        || this.top() > asteroid.y - 10 + asteroid.height
-        || this.right() < asteroid.x
-        || this.left() > asteroid.x - 10 + asteroid.width
+        this.bottom() < sad.y
+        || this.top() > sad.y - 10 + sad.height
+        || this.right() < sad.x
+        || this.left() > sad.x - 10 + sad.width
       );
     }
   }
   
-  const lasers = new Laser();
-  function shootLaser() {
+  const balls= new Ball();
+  function shootBall() {
     if (
       player.exploding === false
       && player.collision === false
     ) {
-      laserArr.push(new Laser (player.x, player.y, getIt));
+      ballArr.push(new Ball (player.x, player.y, getIt));
       if (getIt === false) {
 
+        audio.ball.load();
+        audio.ball.volume = 0.2;
+        audio.ball.play();
       }
       if (getIt === true) {
        
       }
     }
   
-    lasers.shoot = false;
+    balls.shoot = false;
+ 
   };
+
+  class Snacks {
+    constructor(x, y, width, height) {
+      this.x = x;
+      this.y = y;
+      this.height = 50;
+      this.width = 50;
+      this.snack = document.getElementById('cookie');
+    }
+    drawSnack() {
+      gameArea.context.drawImage(
+        this.snack,
+        this.x,
+        this.y,
+        this.width,
+        this.height,
+      );
+    }
+  }
+
+  function createSnacks() {
+    let speed = 2;
+  
+    if (gameArea.totalPoints > 50) {
+      speed = 3;
+    }
+    if (gameArea.totalPoints > 150) {
+      speed = 4;
+    }
+    if (gameArea.totalPoints > 200) {
+      speed = 5;
+    }
+    for (let i = 0; i < snacksArr.length; i += 1) {
+      snacksArr[i].y += speed;
+      snacksArr[i].drawSnack();
+    }
+    if (gameArea.frames % 2000 === 0) {
+      const y = 0;
+      const x = Math.floor(Math.random() * (740 - 60) + 60);
+      snacksArr.push(new Snacks(x, y, 50, 30));
+    }
+  }
+  function getSnack() {
+    for (let i = 0; i < snacksArr.length; i += 1) {
+      if (
+        snacksArr[i].x > player.x
+        && player.x + player.width > snacksArr[i].x + snacksArr[i].width
+        && snacksArr[i].y + snacksArr[i].height >= player.y
+        && snacksArr[i].y <= player.y + player.height
+      ) {
+        snacksArr.splice(i, 1)
+
+        audio.eating.load();
+        audio.eating.volume= 0.2;
+        audio.eating.play();
+
+        getIt = true;
+
+        setTimeout(() => {
+          getIt = false;
+        },0);
+      }
+    }
+    if (getIt === true) {
+      player.lives += 1;
+    }
+  }
+
+
 
 
   function checkCollision() {
     let crashed = false;
-    asteroids.forEach((asteroid, index) => {
-      if (player.crashWith(asteroid) && player.exploding === false) {
+    sads.forEach((sad, index) => {
+      if (player.crashWith(sad) && player.exploding === false) {
         crashed = true;
-        asteroids.splice(index, 1);
+        sads.splice(index, 1);
       }
     });
   
     if (crashed && player.exploding === false) {
       player.exploding = true;
       player.lives -= 1;
+      audio.oof.load();
+     audio.oof.volume = 0.4;
+     audio.oof.play();
 
       if (gameArea.totalPoints >= 50) {
          gameArea.bonusPoints -= 50;
@@ -441,7 +532,7 @@
       setTimeout(() => {
         player.exploding = false;
         player.collision = true;
-      }, 0);
+      }, 500);
     }
   
     enemies.forEach((enemy, index) => {
@@ -462,19 +553,19 @@
       setTimeout(() => {
         player.exploding = false;
         player.collision = true;
-      }, 0);
+      }, 500);
     }
   
-    for (let i = 0; i < asteroids.length; i += 1) {
-      for (let j = 0; j < laserArr.length; j += 1) {
+    for (let i = 0; i < sads.length; i += 1) {
+      for (let j = 0; j < ballArr.length; j += 1) {
         if (
-          laserArr[j].x >= asteroids[i].x
-          && laserArr[j].x <= asteroids[i].x + asteroids[i].width
-          && (laserArr[j].y <= asteroids[i].y + asteroids[i].height
-            && laserArr[j].y >= asteroids[i].y)
+          ballArr[j].x >= sads[i].x
+          && ballArr[j].x <= sads[i].x + sads[i].width
+          && (ballArr[j].y <= sads[i].y + sads[i].height
+            && ballArr[j].y >= sads[i].y)
         ) {
-          asteroids.splice(i, 1);
-          laserArr.splice(j, 1);
+          sads.splice(i, 1);
+          ballArr.splice(j, 1);
           gameArea.bonusPoints += 5;
         }
       }
@@ -482,15 +573,15 @@
   
     
     for (let i = 0; i < enemies.length; i += 1) {
-      for (let j = 0; j < laserArr.length; j += 1) {
+      for (let j = 0; j < ballArr.length; j += 1) {
         if (
-          laserArr[j].x >= enemies[i].x
-          && laserArr[j].x <= enemies[i].x + enemies[i].width
-          && (laserArr[j].y <= enemies[i].y + enemies[i].height
-            && laserArr[j].y >= enemies[i].y)
+          ballArr[j].x >= enemies[i].x
+          && ballArr[j].x <= enemies[i].x + enemies[i].width
+          && (ballArr[j].y <= enemies[i].y + enemies[i].height
+            && ballArr[j].y >= enemies[i].y)
         ) {
           enemies[i].enemyLife -= 1;
-          laserArr.splice(j, 1);
+          ballArr.splice(j, 1);
         }
       }
     }
@@ -502,9 +593,10 @@
     }
   }
   function resetGame() {
-    asteroids = [];
-    laserArr = [];
+    sads = [];
+    ballArr = [];
     enemies = [];
+    snacksArr = [];
     gameArea.bonusPoints = 0;
     gameArea.totalPoints = 0;
     player.lives = 3;
@@ -522,6 +614,9 @@
       gameArea.drawGameOver();
       setTimeout(() => {
         gameArea.menu();
+        audio.gameMusic.pause();
+        audio.menuMusic.load();
+        audio.menuMusic.volume = 0.1;
         enterStart = true;
       }, 3000);
     }
@@ -529,12 +624,12 @@
 
   function collisionTest() {
     if (player.collision === true) {
-      player.ship = document.getElementById('spaceship');
+      player.ichi = document.getElementById('ichi');
       player.collision = true;
       setTimeout(() => {
         player.collision = false;
-        player.ship = document.getElementById('spaceship');
-      }, 0);
+        player.ichi = document.getElementById('ichi');
+      },500);
     } else {
       checkCollision();
     }
@@ -552,18 +647,18 @@
     }
   }
   
-  function removeLaser() {
-    for (let i = 0; i < laserArr.length; i += 1) {
-      if (laserArr[i].y < 0) {
-        laserArr.splice(i, 1);
+  function removeBall() {
+    for (let i = 0; i < ballArr.length; i += 1) {
+      if (ballArr[i].y < 0) {
+        ballArr.splice(i, 1);
       }
     }
   }
 
-  function removeAsteroid() {
-    for (let i = 0; i < asteroids.length; i += 1) {
-      if (asteroids[i].y > 900) {
-        asteroids.splice(i, 1);
+  function removeSad() {
+    for (let i = 0; i < sads.length; i += 1) {
+      if (sads[i].y > 900) {
+        sads.splice(i, 1);
       }
     }
   }
@@ -576,7 +671,7 @@
   }
 
   function updateMenu() {
-    lasers.shoot = false;
+    balls.shoot = false;
     gameArea.drawMenu();
     gameArea.moveBackground();
   }
@@ -586,21 +681,22 @@
     player.newPos();
     gameArea.drawBoard();
     gameArea.moveBackground(); 
-    player.drawSpaceship();
-    createAsteroids();
+    player.drawIchi();
+    createSnacks();
+    createSads();
     createEnemy();
-  for (let i = 0; i < laserArr.length; i += 1) {
-    laserArr[i].drawLaser();
+  for (let i = 0; i < ballArr.length; i += 1) {
+    ballArr[i].drawBall();
   }
     gameArea.frames += 4;
-    lasers.newPosLaser();
-    //player.drawFire();
+    balls.newPosBall();
     gameArea.drawScore();  
     boundaries();
     collisionTest();
     checkGame();
-    removeLaser();
-    removeAsteroid();
+    removeBall();
+    removeSad();
+    getSnack();
   }
   
   gameArea.menu();
@@ -623,8 +719,8 @@
             player.speedX = 5;
             break;
           case 32: 
-            if (lasers.shoot === true) {
-              shootLaser();
+            if (balls.shoot === true) {
+              shootBall();
             }
             break;
             case 13:
@@ -648,14 +744,14 @@
             break;
           case 37: 
             player.speedX = 0;
-            player.ship = document.getElementById('spaceship');
+            player.ichi = document.getElementById('ichi');
             break;
           case 39: 
             player.speedX = 0;
-            player.ship = document.getElementById('spaceship');
+            player.ichi = document.getElementById('ichi');
             break;
           case 32:
-            lasers.shoot = true;
+            balls.shoot = true;
             break;
         }
       };
