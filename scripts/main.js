@@ -1030,9 +1030,11 @@ const newHand= new Hands();
             break;
           case 37: 
             player.speedX = -4;
+            player.ichi = document.getElementById('ichiL');
             break;
           case 39: 
             player.speedX = 5;
+            player.ichi = document.getElementById('ichiR');
             break;
           case 32: 
             if (balls.shoot === true) {
@@ -1060,11 +1062,11 @@ const newHand= new Hands();
             break;
           case 37: 
             player.speedX = 0;
-            player.ichi = document.getElementById('ichi');
+            
             break;
           case 39: 
             player.speedX = 0;
-            player.ichi = document.getElementById('ichi');
+            
             break;
           case 32:
             balls.shoot = true;
