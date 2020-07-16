@@ -1,7 +1,9 @@
-
   let sads = [];
   let ballArr = [];
   let enemies = [];
+  let speedyEnemy = [];
+  let bossHand = [];
+  let boss = [];
   let snacksArr = [];
   let getIt = false;
   let enterStart = true;
@@ -21,6 +23,7 @@
     speed: -2,
     totalPoints: 0,
     bonusPoints: 0,
+    
 
     menu() {
       this.canvas.width = 800;
@@ -145,6 +148,12 @@
       }
       if (gameArea.totalPoints > 150) {
         this.speed = -4;
+      }
+      if (gameArea.totalPoints > 500) {
+        this.speed = -5;
+      }
+      if (gameArea.totalPoints > 1000) {
+        this.speed = -6;
       }
       this.y -= this.speed;
       this.y %= gameArea.canvas.height;
@@ -272,7 +281,7 @@
       speed = 2.5;
     }
   
-    if (gameArea.totalPoints > 200) {
+    if (gameArea.totalPoints > 300) {
       speed = 3;
     }
   
@@ -287,7 +296,7 @@
       sads.push(new Sads(40, 40, x, y));
     }
   
-    if (gameArea.totalPoints > 50) {
+    if (gameArea.totalPoints > 100) {
       if (gameArea.frames % 120 === 0) {
         const y = 0;
         const x = Math.floor(Math.random() * (770 - 20) + 20);
@@ -295,7 +304,7 @@
       }
     }
   
-    if (gameArea.totalPoints > 150) {
+    if (gameArea.totalPoints > 300) {
       if (gameArea.frames % 110 === 0) {
         const y = 0;
         const x = Math.floor(Math.random() * (770 - 20) + 20);
@@ -311,7 +320,8 @@
       this.x = x;
       this.y = y;
       this.enemy = document.getElementById('enemy1');
-      this.enemyLife = Math.floor(Math.random() * 4) + 1 
+      this.enemyLife = 3;
+      
     }
   
     drawEnemy() {
@@ -347,23 +357,191 @@
       const x = Math.floor(Math.random() * (740 - 60) + 60);
       enemies.push(new Enemies(70, 80, x, y, 2));
     }
-    if (gameArea.totalPoints > 50) {
+    if (gameArea.totalPoints > 150) {
       if (gameArea.frames % 900 === 0) {
         const y = 0;
         const x = Math.floor(Math.random() * (740 - 60) + 60);
         enemies.push(new Enemies(70, 80, x, y, 2));
       }
     }
-    if (gameArea.totalPoints > 150) {
+    if (gameArea.totalPoints > 300) {
       if (gameArea.frames % 600 === 0) {
         const y = 0;
         const x = Math.floor(Math.random() * (740 - 60) + 60);
         enemies.push(new Enemies(70, 80, x, y, 2));
       }
     }
+    if (gameArea.totalPoints > 1000) {
+      if (gameArea.frames % 400 === 0) {
+        const y = 0;
+        const x = Math.floor(Math.random() * (740 - 60) + 60);
+        enemies.push(new Enemies(90, 90, x, y, 2));
+      }
+    }
   }
   
   const enemiesNew = new Enemies();
+
+  class SpeedyEnemies {
+    constructor(width, height, x, y) {
+      this.width = width;
+      this.height = height;
+      this.x = x;
+      this.y = y;
+      this.enemy = document.getElementById('enemy2');
+      this.enemyLife = 2;
+      
+    }
+  
+    drawSpeedy() {
+      gameArea.context.drawImage(
+        this.enemy,
+        this.x,
+        this.y,
+        this.width,
+        this.height,
+      );
+    }
+  }
+  
+  function createSpeedy() {
+    let speed = 4;
+  
+    if (gameArea.totalPoints > 100) {
+      speed = 6;
+    }
+    if (gameArea.totalPoints > 200) {
+      speed = 8;
+    }
+    if (gameArea.totalPoints > 500) {
+      speed = 10;
+    }
+    if (gameArea.totalPoints > 1000) {
+      speed = 12;
+    }
+    for (let i = 0; i < speedyEnemy.length; i += 1) {
+      speedyEnemy[i].y += speed;
+      speedyEnemy[i].drawSpeedy();
+    }
+  
+    if (gameArea.frames % 2000 === 0) {
+      const y = 0;
+      const x = Math.floor(Math.random() * (740 - 60) + 60);
+      speedyEnemy.push(new SpeedyEnemies(70, 80, x, y, 2));
+    }
+    if (gameArea.totalPoints > 150) {
+      if (gameArea.frames % 900 === 0) {
+        const y = 0;
+        const x = Math.floor(Math.random() * (700 - 60) + 60);
+        speedyEnemy.push(new SpeedyEnemies(70, 80, x, y, 2));
+      }
+    }
+    if (gameArea.totalPoints > 500) {
+      if (gameArea.frames % 600 === 0) {
+        const y = 0;
+        const x = Math.floor(Math.random() * (650 - 60) + 60);
+        speedyEnemy.push(new SpeedyEnemies(70, 80, x, y, 2));
+      }
+    }
+    if (gameArea.totalPoints > 400) {
+      if (gameArea.frames % 600 === 0) {
+        const y = 0;
+        const x = Math.floor(Math.random() * (590 - 60) + 60);
+        speedyEnemy.push(new SpeedyEnemies(70, 80, x, y, 2));
+      }
+    }
+  }
+  
+  const speedyNew = new SpeedyEnemies();
+
+let bossApear = true;
+  
+  class Boss {
+    constructor(width, height, x, y, speedX, speedY) {
+      this.width = width;
+      this.height = height;
+      this.x = x;
+      this.y = y;
+      this.speedX = speedX;
+      this.speedY = speedY;
+      this.enemy = document.getElementById('evil');
+       
+}
+runLogic () {
+
+  if (this.x >= 690 || this.x <= 0) {
+    this.speedX *= -1;
+  }
+  this.x += this.speedX / 2;
+} 
+
+    drawBoss() {
+      gameArea.context.drawImage(
+        this.enemy,
+        this.x,
+        this.y,
+        this.width,
+        this.height,
+      );
+    }
+  }
+
+
+function createBoss() {
+        if (gameArea.totalPoints >= 1000 && gameArea.totalPoints <= 1800)  {
+          bossApear = false;
+          for (let i = 0; i <boss.length; i++) {
+            boss[0].drawBoss()
+            boss[0].runLogic()
+          }
+        
+        
+
+}
+    if (gameArea.frames % 2000 === 0) {
+      boss.push(new Boss(250, 250, 50, 25,1,0));
+    }
+  }
+
+  const newBoss = new Boss();
+  
+  class Hands {
+    constructor(width, height, x, y) {
+      this.width = width;
+      this.height = height;
+      this.x = x;
+      this.y = y;
+      this.enemy = document.getElementById('evilHand');
+    }
+  
+    drawHand() {
+      gameArea.context.drawImage(
+        this.enemy,
+        this.x,
+        this.y,
+        this.width,
+        this.height,
+      );
+    }
+  }
+  
+  function createHand() {
+    let speed = 4;
+    if (gameArea.totalPoints >= 1000  && gameArea.totalPoints <= 1800) {  
+      for (let i = 0; i < bossHand.length; i += 1) {
+        bossHand[i].x += speed;
+        bossHand[i].drawHand();
+    }
+  
+    if (gameArea.frames % 400 === 0) {
+      const y  = Math.floor(Math.random() * (800 - 60) + 60);
+      const x  = 0;
+      bossHand.push(new Hands(80, 80, x, y));
+    }
+}
+  }
+
+const newHand= new Hands();
 
   
   
@@ -478,7 +656,7 @@
     if (gameArea.frames % 2000 === 0) {
       const y = 0;
       const x = Math.floor(Math.random() * (740 - 60) + 60);
-      snacksArr.push(new Snacks(x, y, 50, 30));
+      snacksArr.push(new Snacks(x, y, 50, 50));
     }
   }
   function getSnack() {
@@ -506,8 +684,6 @@
       player.lives += 1;
     }
   }
-
-
 
 
   function checkCollision() {
@@ -545,6 +721,9 @@
     if (crashed && player.exploding === false) {
       player.exploding = true;
       player.lives -= 1;
+      audio.oof.load();
+      audio.oof.volume = 0.4;
+      audio.oof.play();
   
       if (gameArea.totalPoints >= 50) {
         gameArea.bonusPoints -= 50;
@@ -555,6 +734,70 @@
         player.collision = true;
       }, 500);
     }
+
+       bossHand.forEach((enemy, index) => {
+      if (player.crashWith(enemy) && player.exploding === false) {
+        crashed = true;
+        bossHand.splice(index, 1);
+      }
+    });
+  
+    if (crashed && player.exploding === false) {
+      player.exploding = true;
+      player.lives -= 1;
+      audio.oof.load();
+      audio.oof.volume = 0.4;
+      audio.oof.play()
+      setTimeout(() => {
+        player.exploding = false;
+        player.collision = true;
+      }, 500);
+    }
+
+    
+    speedyEnemy.forEach((enemy, index) => {
+      if (player.crashWith(enemy) && player.exploding === false) {
+        crashed = true;
+        speedyEnemy.splice(index, 1);
+      }
+    });
+  
+    if (crashed && player.exploding === false) {
+      player.exploding = true;
+      player.lives -= 1;
+      audio.oof.load();
+      audio.oof.volume = 0.4;
+      audio.oof.play();
+  
+      if (gameArea.totalPoints >= 50) {
+        gameArea.bonusPoints -= 50;
+      } else { gameArea.bonusPoints = 0; }
+  
+      setTimeout(() => {
+        player.exploding = false;
+        player.collision = true;
+      }, 500);
+    }
+
+    boss.forEach(() => {
+    if (crashed && player.exploding === false) {
+      player.exploding = true;
+      player.lives -= 1;
+      audio.oof.load();
+      audio.oof.volume = 0.4;
+      audio.oof.play();
+  
+      if (gameArea.totalPoints >= 50) {
+        gameArea.bonusPoints -= 50;
+      } else { gameArea.bonusPoints = 0; }
+  
+      setTimeout(() => {
+        player.exploding = false;
+        player.collision = true;
+      }, 500);
+    }
+  });
+
   
     for (let i = 0; i < sads.length; i += 1) {
       for (let j = 0; j < ballArr.length; j += 1) {
@@ -591,12 +834,54 @@
         enemies.splice(i, 1);
       }
     }
+
+    for (let i = 0; i < speedyEnemy.length; i += 1) {
+      for (let j = 0; j < ballArr.length; j += 1) {
+        if (
+          ballArr[j].x >= speedyEnemy[i].x
+          && ballArr[j].x <= speedyEnemy[i].x + speedyEnemy[i].width
+          && (ballArr[j].y <= speedyEnemy[i].y + speedyEnemy[i].height
+            && ballArr[j].y >= speedyEnemy[i].y)
+        ) {
+          speedyEnemy[i].enemyLife -= 1;
+          ballArr.splice(j, 1);
+        }
+      }
+    }
+    for (let i = 0; i < speedyEnemy.length; i += 1) {
+      if (speedyEnemy[i].enemyLife === 0) {
+        gameArea.bonusPoints += 45;
+        speedyEnemy.splice(i, 1);
+      }
+    }
+    for (let i = 0; i < boss.length; i += 1) {
+      for (let j = 0; j < ballArr.length; j += 1) {
+        if (
+          ballArr[j].x >= boss[i].x
+          && ballArr[j].x <= boss[i].x + boss[i].width
+          && (ballArr[j].y <= boss[i].y + boss[i].height
+            && ballArr[j].y >= boss[i].y)
+        ) {
+          boss[i].enemyLife -= 0;
+        }
+      }
+    }
+    for (let i = 0; i < boss.length; i += 1) {
+      if (boss[i].enemyLife === 0) {
+        gameArea.bonusPoints += 0;
+        boss.splice(i, 1);
+      };
+    }
   }
+
   function resetGame() {
     sads = [];
     ballArr = [];
     enemies = [];
+    speedyEnemy = [];
     snacksArr = [];
+    bossHand = [];
+    boss = [];
     gameArea.bonusPoints = 0;
     gameArea.totalPoints = 0;
     player.lives = 3;
@@ -646,6 +931,11 @@
       player.x += 5;
     }
   }
+   
+  
+
+
+
   
   function removeBall() {
     for (let i = 0; i < ballArr.length; i += 1) {
@@ -669,6 +959,21 @@
       }
     }
   }
+  function removeSpeedy() {
+    for (let i = 0; i < speedyEnemy.length; i += 1) {
+      if (speedyEnemy[i].y > 900) {
+        speedyEnemy.splice(i, 1);
+      }
+    }
+  }
+  function removeHand() {
+    for (let i = 0; i < bossHand.length; i += 1) {
+      if (bossHand[i].x > 800) {
+        bossHand.splice(i, 1);
+      }
+    }
+  }
+
 
   function updateMenu() {
     balls.shoot = false;
@@ -676,15 +981,23 @@
     gameArea.moveBackground();
   }
 
+
+  
   function updateGame() {
     gameArea.clear();
     player.newPos();
     gameArea.drawBoard();
     gameArea.moveBackground(); 
     player.drawIchi();
+    
     createSnacks();
     createSads();
     createEnemy();
+    createSpeedy();
+    createHand();
+    createBoss();
+    
+    
   for (let i = 0; i < ballArr.length; i += 1) {
     ballArr[i].drawBall();
   }
@@ -696,7 +1009,10 @@
     checkGame();
     removeBall();
     removeSad();
+    removeSpeedy();
+    removeHand();
     getSnack();
+
   }
   
   gameArea.menu();
