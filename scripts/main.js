@@ -50,12 +50,12 @@
     },
     
     drawBoard() {
-      const starBackground = document.getElementById('background');
-      gameArea.context.drawImage(starBackground, 0, this.y, 800, 900);
+      const background = document.getElementById('background');
+      gameArea.context.drawImage(background, 0, this.y, 800, 900);
   
       if (this.speed < 0) {
         gameArea.context.drawImage(
-          starBackground,
+          background,
           0,
           this.y - this.canvas.height,
           800,
@@ -65,14 +65,13 @@
   },
 
   drawMenu() {
-    const starBackground = document.getElementById('background');
+    const background = document.getElementById('background');
     const ichi = document.getElementById('ichi');
-
-    gameArea.context.drawImage(starBackground, 0, this.y, 800, 900);
+    gameArea.context.drawImage(background, 0, this.y, 800, 900);
 
     if (this.speed < 0) {
       gameArea.context.drawImage(
-        starBackground,
+        background,
         0,
         this.y - this.canvas.height,
         800,
@@ -108,29 +107,36 @@
 
 
   drawGameOver() {
-    const starBackground = document.getElementById('background');
-    gameArea.context.drawImage(starBackground, 0, this.y, 800, 900);
+    const background = document.getElementById('background');
+    gameArea.context.drawImage(background, 0, this.y, 800, 900);
 
     if (this.speed < 0) {
       gameArea.context.drawImage(
-        starBackground,
+        background,
         0,
         this.y - this.canvas.height,
         800,
         900,
       );
     }
+    const points = document.getElementById('points');
+    this.context.drawImage(points, 300, 670, 180, 100);
+    this.context.font = ' 20 px AstroSpace';
+    this.context.fillStyle = '#f5eedc';
+    this.context.fillText('Corresponding points', 260, 650);
 
     this.context.font = ' 60px AstroSpace';
     this.context.fillStyle = '#f5eedc';
     this.context.fillText('GAME OVER!', 200, 350);
 
-    this.context.font = ' 20px AstroSpace';
+    this.context.font = ' 30px AstroSpace';
     this.context.fillStyle = '#f5eedc';
-    this.context.fillText(`Your score was: ${this.totalPoints}`, 290, 530);
+    this.context.fillText(`Your score was: ${this.totalPoints}`, 240, 500);
+
+      this.context.font = ' 18px AstroSpace';
+  this.context.fillStyle = '#f5eedc';
+  this.context.fillText(`Tip: Try to not lose all your lives`, 220, 830);
   },
-
-
     drawScore() {
       this.totalPoints = this.bonusPoints;
       this.context.font = ' 20px AstroSpace';
@@ -147,13 +153,13 @@
         this.speed = -3;
       }
       if (gameArea.totalPoints > 150) {
-        this.speed = -4;
-      }
-      if (gameArea.totalPoints > 500) {
         this.speed = -5;
       }
-      if (gameArea.totalPoints > 1000) {
+      if (gameArea.totalPoints > 500) {
         this.speed = -6;
+      }
+      if (gameArea.totalPoints > 1000) {
+        this.speed = -8;
       }
       this.y -= this.speed;
       this.y %= gameArea.canvas.height;
@@ -469,7 +475,7 @@ let bossApear = true;
 }
 runLogic () {
 
-  if (this.x >= 690 || this.x <= 0) {
+  if (this.x >= 600|| this.x <= 0) {
     this.speedX *= -1;
   }
   this.x += this.speedX / 2;
@@ -802,11 +808,7 @@ const newHand= new Hands();
     for (let i = 0; i < sads.length; i += 1) {
       for (let j = 0; j < ballArr.length; j += 1) {
         if (
-          ballArr[j].x >= sads[i].x
-          && ballArr[j].x <= sads[i].x + sads[i].width
-          && (ballArr[j].y <= sads[i].y + sads[i].height
-            && ballArr[j].y >= sads[i].y)
-        ) {
+          ballArr[j].x >= sads[i].x && ballArr[j].x <= sads[i].x + sads[i].width && (ballArr[j].y <= sads[i].y + sads[i].height && ballArr[j].y >= sads[i].y)) {
           sads.splice(i, 1);
           ballArr.splice(j, 1);
           gameArea.bonusPoints += 5;
@@ -818,11 +820,7 @@ const newHand= new Hands();
     for (let i = 0; i < enemies.length; i += 1) {
       for (let j = 0; j < ballArr.length; j += 1) {
         if (
-          ballArr[j].x >= enemies[i].x
-          && ballArr[j].x <= enemies[i].x + enemies[i].width
-          && (ballArr[j].y <= enemies[i].y + enemies[i].height
-            && ballArr[j].y >= enemies[i].y)
-        ) {
+          ballArr[j].x >= enemies[i].x && ballArr[j].x <= enemies[i].x + enemies[i].width && (ballArr[j].y <= enemies[i].y + enemies[i].height && ballArr[j].y >= enemies[i].y)) {
           enemies[i].enemyLife -= 1;
           ballArr.splice(j, 1);
         }
@@ -903,7 +901,7 @@ const newHand= new Hands();
         audio.menuMusic.load();
         audio.menuMusic.volume = 0.1;
         enterStart = true;
-      }, 3000);
+      }, 4000);
     }
   } 
 
@@ -931,12 +929,7 @@ const newHand= new Hands();
       player.x += 5;
     }
   }
-   
-  
 
-
-
-  
   function removeBall() {
     for (let i = 0; i < ballArr.length; i += 1) {
       if (ballArr[i].y < 0) {
@@ -974,15 +967,12 @@ const newHand= new Hands();
     }
   }
 
-
   function updateMenu() {
     balls.shoot = false;
     gameArea.drawMenu();
     gameArea.moveBackground();
   }
 
-
-  
   function updateGame() {
     gameArea.clear();
     player.newPos();
@@ -1065,8 +1055,7 @@ const newHand= new Hands();
             
             break;
           case 39: 
-            player.speedX = 0;
-            
+            player.speedX = 0
             break;
           case 32:
             balls.shoot = true;
